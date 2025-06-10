@@ -10,7 +10,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, role: 'donor' | 'recipient') => Promise<void>;
   logout: () => void;
   loading: boolean;
 }
@@ -30,15 +30,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, role: 'donor' | 'recipient') => {
     try {
       // TODO: Replace with actual API call
       // Simulate API call
       const mockUser: User = {
         id: '1',
-        name: 'John Doe',
+        name: role === 'donor' ? 'John Donor' : 'Jane Recipient',
         email: email,
-        role: 'recipient'
+        role: role
       };
       
       setUser(mockUser);

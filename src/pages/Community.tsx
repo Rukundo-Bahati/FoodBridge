@@ -1,13 +1,18 @@
-
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { MessageSquare, Users, Heart, ThumbsUp, Send, Search, Plus } from "lucide-react";
-import Navigation from "@/components/Navigation";
+import { Navigation } from "@/components/Navigation";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/lib/auth-context";
 
 const Community = () => {
-  const stories = [
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const [newPost, setNewPost] = useState("");
+  const [stories, setStories] = useState([
     {
       id: 1,
       author: "Sarah M.",
@@ -17,7 +22,9 @@ const Community = () => {
       time: "2 hours ago",
       likes: 24,
       comments: 8,
-      image: "🥬"
+      image: "🥬",
+      liked: false,
+      supported: false
     },
     {
       id: 2,
@@ -28,7 +35,9 @@ const Community = () => {
       time: "1 day ago",
       likes: 45,
       comments: 12,
-      image: "🍞"
+      image: "🍞",
+      liked: false,
+      supported: false
     },
     {
       id: 3,
@@ -39,9 +48,11 @@ const Community = () => {
       time: "2 days ago",
       likes: 67,
       comments: 15,
-      image: "🏠"
+      image: "🏠",
+      liked: false,
+      supported: false
     }
-  ];
+  ]);
 
   const tips = [
     {
@@ -60,6 +71,101 @@ const Community = () => {
       category: "Volunteers"
     }
   ];
+
+  const handleCreatePost = () => {
+    if (!newPost.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter some content for your post",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const newStory = {
+      id: stories.length + 1,
+      author: user?.name || "Anonymous",
+      role: user?.role || "Member",
+      title: newPost.split(" ").slice(0, 5).join(" ") + "...",
+      content: newPost,
+      time: "Just now",
+      likes: 0,
+      comments: 0,
+      image: "🌟",
+      liked: false,
+      supported: false
+    };
+
+    setStories([newStory, ...stories]);
+    setNewPost("");
+    toast({
+      title: "Success",
+      description: "Your story has been shared with the community!"
+    });
+  };
+
+  const handleLike = (storyId: number) => {
+    setStories(stories.map(story => {
+      if (story.id === storyId) {
+        return {
+          ...story,
+          likes: story.liked ? story.likes - 1 : story.likes + 1,
+          liked: !story.liked
+        };
+      }
+      return story;
+    }));
+  };
+
+  const handleSupport = (storyId: number) => {
+    setStories(stories.map(story => {
+      if (story.id === storyId) {
+        return {
+          ...story,
+          supported: !story.supported
+        };
+      }
+      return story;
+    }));
+  };
+
+  const handleLoadMore = () => {
+    // Simulate loading more stories
+    toast({
+      title: "Loading more stories...",
+      description: "Please wait while we fetch more content"
+    });
+  };
+
+  const handleStartDiscussion = () => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to start a discussion",
+        variant: "destructive"
+      });
+      return;
+    }
+    // Implement discussion creation logic
+    toast({
+      title: "Coming Soon",
+      description: "Discussion feature will be available soon!"
+    });
+  };
+
+  const handleFindGroups = () => {
+    toast({
+      title: "Coming Soon",
+      description: "Group finder feature will be available soon!"
+    });
+  };
+
+  const handleJoinEvent = () => {
+    toast({
+      title: "Coming Soon",
+      description: "Event joining feature will be available soon!"
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -86,14 +192,19 @@ const Community = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Input placeholder="What impact did you make today?" className="text-base" />
+                <Input 
+                  placeholder="What impact did you make today?" 
+                  className="text-base"
+                  value={newPost}
+                  onChange={(e) => setNewPost(e.target.value)}
+                />
                 <div className="flex justify-between items-center">
                   <div className="flex gap-2">
                     <Badge variant="outline" className="cursor-pointer hover:bg-muted">📸 Photo</Badge>
                     <Badge variant="outline" className="cursor-pointer hover:bg-muted">🎯 Achievement</Badge>
                     <Badge variant="outline" className="cursor-pointer hover:bg-muted">💡 Tip</Badge>
                   </div>
-                  <Button>
+                  <Button onClick={handleCreatePost}>
                     <Send className="mr-2 h-4 w-4" />
                     Share
                   </Button>
@@ -130,7 +241,12 @@ const Community = () => {
                     </div>
                     <div className="flex items-center justify-between pt-3 border-t">
                       <div className="flex items-center space-x-4">
-                        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-red-600">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className={`text-muted-foreground hover:text-red-600 ${story.liked ? 'text-red-600' : ''}`}
+                          onClick={() => handleLike(story.id)}
+                        >
                           <Heart className="mr-1 h-4 w-4" />
                           {story.likes}
                         </Button>
@@ -139,7 +255,12 @@ const Community = () => {
                           {story.comments}
                         </Button>
                       </div>
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className={story.supported ? 'text-green-600' : ''}
+                        onClick={() => handleSupport(story.id)}
+                      >
                         <ThumbsUp className="mr-1 h-4 w-4" />
                         Support
                       </Button>
@@ -150,7 +271,7 @@ const Community = () => {
             </div>
 
             <div className="text-center">
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" onClick={handleLoadMore}>
                 Load More Stories
               </Button>
             </div>
@@ -210,15 +331,15 @@ const Community = () => {
                 <CardTitle className="text-lg">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full justify-start">
+                <Button className="w-full justify-start" onClick={handleStartDiscussion}>
                   <Plus className="mr-2 h-4 w-4" />
                   Start Discussion
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start" onClick={handleFindGroups}>
                   <Search className="mr-2 h-4 w-4" />
                   Find Local Groups
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start" onClick={handleJoinEvent}>
                   <Users className="mr-2 h-4 w-4" />
                   Join Event
                 </Button>

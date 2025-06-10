@@ -20,10 +20,10 @@ const Footer = () => {
             <div className="flex space-x-4">
               <Button variant="outline" size="sm" className="border-background/20 text-background hover:bg-background hover:text-foreground">
                 <UserPlus className="mr-2 h-4 w-4" />
-                Join as Student
+                Join as Recipient
               </Button>
-              <Button variant="outline" size="sm" className="border-background/20 text-background hover:bg-background hover:text-foreground">
-                <MapPin className="mr-2 h-4 w-4" />
+              <Button variant="outline" size="sm" className="border-background/20 text-black ">
+                <MapPin className="mr-2 h-4 w-4 text-black" />
                 Become a Donor
               </Button>
             </div>
