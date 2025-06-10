@@ -56,8 +56,8 @@ Food Bridge Impact is a web application designed to connect food donors (restaur
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/food-bridge-impact.git
-   cd food-bridge-impact
+   git clone https://github.com/yourusername/FoodBridge.git
+   cd FoodBridge
    ```
 
 2. Install dependencies:
@@ -79,7 +79,7 @@ Food Bridge Impact is a web application designed to connect food donors (restaur
 ## Project Structure 📁
 
 ```
-food-bridge-impact/
+FoodBridge/
 ├── src/
 │   ├── components/     # Reusable UI components
 │   ├── pages/         # Page components

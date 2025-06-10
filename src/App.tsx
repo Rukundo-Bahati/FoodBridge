@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navigation from "@/components/Navigation";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp";
@@ -26,7 +25,6 @@ function App() {
         <TooltipProvider>
           <Router>
             <div className="min-h-screen bg-background">
-              <Navigation />
               <main className="">
                 <Routes>
                   {/* Public Routes */}
