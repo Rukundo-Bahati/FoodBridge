@@ -109,10 +109,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Lucide Icons](https://lucide.dev/) for the icon set
 - [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
 
-## Contact 📧
-
-For any questions or suggestions, please reach out to us at [contact@foodbridgeimpact.com](mailto:contact@foodbridgeimpact.com)
 
 ---
 
-Made with ❤️ for a better world
